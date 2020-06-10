@@ -17,9 +17,7 @@ class PointsController {
     /* os dados dos items estao vindo em forma de String, aqui eu estou convertendo para uma array
     aqui eu separado os itens na virgula
     aqui eu percorro estes itens excluidos os espaços e tornando eles numa array de numeros */
-    const paserdItems = String(items)
-    .split(',')
-    .map(item => Number(item.trim()))
+    const paserdItems = String(items).split(',').map(item => Number(item.trim()))
 
     /* 
     aqui eu pego os points que teem a cidade, uf ou items passados no query
