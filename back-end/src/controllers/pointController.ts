@@ -30,7 +30,16 @@ class PointsController {
       .distinct()
       .select('points.*')
 
-    return response.json(points)
+
+      const serializedPoints = points.map(point => {
+        return {
+          ...point,
+          image_url: `http://192.168.0.117:3333/uploads/${point.image}`
+        }
+      })
+  
+      // retornando essa lista de items
+      return response.json(serializedPoints)
   }
 
   // metodo para listar 1 point
@@ -83,7 +92,7 @@ class PointsController {
     
     // criando a const points com todos os dados da point
     const point = {
-      image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60',
+      image: request.file.filename,
       name,
       email,
       whatsapp,
@@ -103,11 +112,14 @@ class PointsController {
     const point_id = insertedIds[0]
   
     // Aqui eu crio uma const com os id dos items e o id da tabela points para fazer o pivo entre as duas tabelas
-    const pointItems = items.map((item_id: number) => {
-      return {
-        item_id,
-        point_id
-      }
+    const pointItems = items
+      .split(',')
+      .map((item: string) => Number(item.trim()))
+      .map((item_id: number) => {
+        return {
+          item_id,
+          point_id
+        }
     })
     
     // aqui eu crio na tabela point_items o pointItem

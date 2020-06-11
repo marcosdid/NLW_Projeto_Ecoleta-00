@@ -8,9 +8,16 @@ import PointController from './controllers/pointController'
 // importando minha classe itemcontroller
 import ItemController from './controllers/itemController'
 
-
+import multer from 'multer'
+import multerConfing from './config/multer'
+ 
 // fazendo a const routes ficar responsavel pelas rotas da minha aplicação
 const routes = express.Router()
+
+const upload = multer(multerConfing)
+
+
+
 // colocando os atributos do classe na const
 const pointController = new PointController
 // colocando os atributos do classe na const
@@ -21,8 +28,13 @@ const itemController = new ItemController
 routes.get('/items', itemController.index )
 
 
+
+
 // criando a rota para criação de points 
-routes.post('/points', pointController.create)
+routes.post('/points', upload.single('image') , pointController.create)
+
+
+
 
 // crinado a rota quer lista um point especifico por id
 routes.get('/points/:id', pointController.show)
