@@ -7,6 +7,8 @@ import routes from './routes'
 
 import cors from 'cors'
 
+import { errors } from 'celebrate'
+
 import path from 'path'
 
 // criando minha aplicação ** colocando dentro de app as funçoes express
@@ -27,6 +29,8 @@ Para podermos acessar os arquivos da pasta upload pelo navegador
 a imagem, entao passados que ele é estatico depois o caminho ate ele
 */ 
 app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')))
+
+app.use(errors())
 
 // colocando meu app pra ouvir a porta (3333)
 app.listen(3333)

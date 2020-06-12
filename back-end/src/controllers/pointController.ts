@@ -54,6 +54,12 @@ class PointsController {
       return response.status(400).json({message: 'Point not found'})
     }
 
+
+    const serializedPoint = {   
+        ...point,
+        image_url: `http://192.168.0.117:3333/uploads/${point.image}`
+      }
+
     /* 
     SELECT * FROM itens
       JOIN point_itens ON items.id = point_itens.item_id
@@ -67,7 +73,7 @@ class PointsController {
       .select('items.title')
 
     // retornando o point e os items
-    return response.json({point, items})
+    return response.json({point: serializedPoint, items})
   }
 
   async create(request: Request, response: Response) {

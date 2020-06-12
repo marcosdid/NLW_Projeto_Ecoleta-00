@@ -12,6 +12,8 @@ import api from '../../services/api'
 // importando o axios para fazer requisiçoes
 import axios from 'axios'
 
+import Dropzone from '../../components/Dropzone/index'
+
 // importando o evento do mouse no leaflet
 import { LeafletMouseEvent } from 'leaflet'
 
@@ -61,8 +63,9 @@ const CreatePoint =  () => {
   const [ selectedCity, setSelectedCity] = useState('0')
   // estado que ira armazenar a posição no mapa que o cliente escolher
   const [ selectedPosition, setSelectedPosition] = useState<[number, number]>([0, 0])
-  
 
+  const [selectedFile, setSelectedFile] = useState<File>()
+  
   const history = useHistory()
 
   // aqui eu to criando uma função que recebe o valor do meu select toda vez q ele for alterado e armazena na const UF
@@ -112,15 +115,19 @@ const CreatePoint =  () => {
     const [ latitude, longtude ] = selectedPosition
     const items = selectedItems
 
-    const data = {
-      name, 
-      email,
-      whatsapp,
-      uf,
-      city,
-      latitude,
-      longtude,
-      items
+    const data = new FormData()
+
+    data.append('name', name)
+    data.append('email', email)
+    data.append('whatsapp', whatsapp)
+    data.append('uf', uf)
+    data.append('city', city)
+    data.append('latitude', String(latitude))
+    data.append('longtude', String(longtude))
+    data.append('items', items.join(','))
+    
+    if (selectedFile) {
+      data.append('image', selectedFile)
     }
 
     await api.post('points', data)
@@ -129,9 +136,7 @@ const CreatePoint =  () => {
 
     history.push('/')
   }
-
- 
-
+  
   /* useEffect é um soluçao para nosso problema com o fato de fazer varias requisiçoes toda vez q a pagina for alterada
   useEffect é um função q recebe 2 parametros o primeiro parametro é qual função eu quero executar
   o segundo parametro é quando eu quero executar para eu determinar quando executar essa função eu passo no segundo parametro
@@ -193,6 +198,8 @@ const CreatePoint =  () => {
 
       <form onSubmit={handleSubmit}>
         <h1>Cadastro do <br/> ponto de coleta</h1>
+
+        <Dropzone onFileUploaded={setSelectedFile} />
 
         <fieldset>
           <legend>
